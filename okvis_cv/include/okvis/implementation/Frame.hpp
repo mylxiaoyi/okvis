@@ -117,7 +117,7 @@ int Frame::detect()
   // run the detector
   OKVIS_ASSERT_TRUE_DBG(Exception, detector_ != NULL,
                         "Detector not initialised!");
-  detector_->detect(image_, keypoints_);
+  const_cast<cv::FeatureDetector*>(detector_.get())->detect(image_, keypoints_);
   return keypoints_.size();
 }
 
@@ -150,7 +150,7 @@ int Frame::describe(const Eigen::Vector3d & extractionDirection)
   }
 
   // extraction
-  extractor_->compute(image_, keypoints_, descriptors_);
+  const_cast<cv::DescriptorExtractor*>(extractor_.get())->compute(image_, keypoints_, descriptors_);
   landmarkIds_ = std::vector<uint64_t>(keypoints_.size(),0);
   return keypoints_.size();
 }
@@ -185,7 +185,7 @@ int Frame::describeAs(const Eigen::Vector3d & extractionDirection)
   }
 
   // extraction
-  extractor_->compute(image_, keypoints_, descriptors_);
+  const_cast<cv::DescriptorExtractor*>(extractor_.get())->compute(image_, keypoints_, descriptors_);
   return keypoints_.size();
 }
 
